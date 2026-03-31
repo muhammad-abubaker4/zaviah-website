@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import zaviahLogo from "@/assets/Zaviah_Logo.png";
+import zaviahLogo from "@/assets/Zaviah_Logo1.png";
 
 const navItems = [
   { name: "About", href: "#about" },

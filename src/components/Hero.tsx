@@ -6,15 +6,15 @@ import heroImage from "@/assets/BG-1.jpeg";
 
 const Hero = () => {
   return (
-    <section className="relative flex items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src={heroImage}
           alt="Students collaborating and learning together"
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/55 via-primary/45 to-accent/30" />
       </div>
 
       {/* Content */}
@@ -69,15 +69,15 @@ const Hero = () => {
             className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 text-primary-foreground/90"
           >
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">2025</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">July 2025</div>
               <div className="text-xs sm:text-sm mt-1">Founded</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">250+</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">400+</div>
               <div className="text-xs sm:text-sm mt-1">Students Empowered</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">10+</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">20+</div>
               <div className="text-xs sm:text-sm mt-1">Mentors</div>
             </div>
           </motion.div>
