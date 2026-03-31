@@ -10,7 +10,8 @@ import muhammadAbubaker from "@/assets/team/Muhammad_Abubaker.jpeg";
 import qamarAbbas from "@/assets/team/Qamar_Abbas.jpeg";
 import amnaIrfan from "@/assets/team/Amna_Irfan.jpeg";
 import shaheer from "@/assets/team/Shaheer.jpeg";
-import arsalan from "@/assets/team/Arsalan_Arif.jpeg";
+import aliGoharQureshi from "@/assets/team/Ali Gohar.jpg";
+// import arsalan from "@/assets/team/Arsalan_Arif.jpeg";
 
 const teamMembers = [
   {
@@ -41,7 +42,7 @@ const teamMembers = [
     name: "Ali Gohar Qureshi",
     role: "Outreach & Engagement",
     description: "Strengthens partnerships and expands student reach through strategic outreach.",
-    image: undefined, // Replace with: aliGoharQureshi
+    image: aliGoharQureshi, 
   },
   // {
   //   name: "Arsalan Arif",
