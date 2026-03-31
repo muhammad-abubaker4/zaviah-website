@@ -23,7 +23,7 @@ const socialLinks = [
   {
     icon: Instagram,
     label: "Instagram",
-    url: "https://www.instagram.com/zaviah_org",
+    url: "https://www.instagram.com/zaviahorg",
   },
   {
     icon: Facebook,
