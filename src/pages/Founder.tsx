@@ -7,7 +7,7 @@ const Founder = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+      <main id="main-content" tabIndex={-1} className="outline-none">
       {/* Banner Section */}
       <section className="relative py-32 bg-gradient-to-br from-primary via-accent to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -127,6 +127,7 @@ const Founder = () => {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

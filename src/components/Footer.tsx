@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Instagram, Facebook, Linkedin, Send } from "lucide-react";
 
 const Footer = () => {
@@ -44,6 +45,16 @@ const Footer = () => {
                   Contact
                 </a>
               </li>
+              <li>
+                <Link to="/privacy" className="text-background/80 hover:text-secondary transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-background/80 hover:text-secondary transition-colors">
+                  Terms of Use
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -52,7 +63,7 @@ const Footer = () => {
             <h4 className="font-bold mb-4 text-lg">Connect With Us</h4>
             <div className="flex gap-4">
               <a
-                href="https://www.instagram.com/zaviah_org"
+                href="https://www.instagram.com/zaviahorg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-80 flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -98,6 +109,17 @@ const Footer = () => {
         <div className="border-t border-background/20 pt-8 text-center text-background/70 text-sm">
           <p>&copy; {currentYear} Zaviah. All rights reserved.</p>
           <p className="mt-2">Built with passion for empowering youth.</p>
+          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link to="/privacy" className="hover:text-secondary">
+              Privacy
+            </Link>
+            <span className="text-background/40" aria-hidden>
+              |
+            </span>
+            <Link to="/terms" className="hover:text-secondary">
+              Terms
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

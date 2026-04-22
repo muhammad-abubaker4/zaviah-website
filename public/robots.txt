@@ -1,3 +1,5 @@
+Sitemap: https://zaviahorg.netlify.app/sitemap.xml
+
 User-agent: Googlebot
 Allow: /
 

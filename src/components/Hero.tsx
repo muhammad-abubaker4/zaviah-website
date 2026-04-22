@@ -1,33 +1,58 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import heroImage from "@/assets/BG-1.jpeg";
+import { heroBackgroundSlides } from "@/data/galleryImages";
 
+const SLIDE_INTERVAL_MS = 5500;
 
 const Hero = () => {
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (heroBackgroundSlides.length <= 1) return;
+    const id = window.setInterval(() => {
+      setSlideIndex((i) => (i + 1) % heroBackgroundSlides.length);
+    }, SLIDE_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt="Students collaborating and learning together"
-          className="h-full w-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/55 via-primary/45 to-accent/30" />
+        {heroBackgroundSlides.map((slide, i) => (
+          <motion.img
+            key={slide.src}
+            src={slide.src}
+            alt={i === slideIndex ? slide.alt : ""}
+            aria-hidden={i !== slideIndex}
+            decoding="async"
+            fetchPriority={i === 0 ? "high" : "low"}
+            animate={{ opacity: i === slideIndex ? 1 : 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/55 via-primary/45 to-accent/30 z-[1]" />
       </div>
 
-      {/* Content */}
       <div className="container relative z-10 px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="w-full flex justify-center"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
-              Empowering Youth Through{" "}
-              <span className="text-secondary">Mentorship</span><span className="text-white">,</span> <span className="text-secondary">Guidance</span> & <span className="text-secondary">Growth</span>
+            <h1 className="flex flex-col items-center text-xl min-[400px]:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+              <span className="whitespace-nowrap">Empowering Youth Through</span>
+              <span className="whitespace-nowrap">
+                <span className="text-secondary">Mentorship</span>
+                <span className="text-white">, </span>
+                <span className="text-secondary">Guidance</span>
+                {" "}&{" "}
+                <span className="text-secondary">Growth</span>
+              </span>
             </h1>
           </motion.div>
 
@@ -35,7 +60,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg sm:text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto"
+            className="w-full max-w-[100vw] text-primary-foreground/90 mb-8 px-1 text-xs min-[380px]:text-sm sm:text-base md:text-lg whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             A youth-led platform connecting students with mentors, opportunities, and the guidance they need to thrive
           </motion.p>
@@ -84,7 +109,22 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {heroBackgroundSlides.length > 1 && (
+        <div
+          className="absolute bottom-20 sm:bottom-24 left-1/2 z-10 flex -translate-x-1/2 gap-1.5"
+          aria-hidden
+        >
+          {heroBackgroundSlides.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === slideIndex ? "w-6 bg-primary-foreground" : "w-1.5 bg-primary-foreground/40"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -8,6 +8,10 @@ import balochistanPhysioLogo from "@/assets/partners/BPC_Logo.png";
 import youngLeadersLogo from "@/assets/partners/YLC_Logo.jpg";
 import youthCombinationLogo from "@/assets/partners/YCP_Logo.png";
 import iccd from "@/assets/partners/ICCD_Logo.png";
+import rahnumaaLogo from "@/assets/partners/Rahnumaa_Logo.png";
+import paxYouthLogo from "@/assets/partners/Pax_Youth_Logo.png";
+import ygpLogo from "@/assets/partners/YGP_Logo.png";
+import superStudentPkLogo from "@/assets/partners/SuperStudentPK_Logo.png";
 
 const partners = [
   {
@@ -35,7 +39,34 @@ const partners = [
     description: "Youth-driven organization focused on mentorship, mindset growth, and skill-building.",
     logo: youthCombinationLogo,
   },
-
+  {
+    name: "Rahnumaa",
+    type: "Community Partner",
+    description:
+      "Dedicated to guiding youth toward brighter prospects, supporting educational journeys and professional futures through strategic mentorship and guidance.",
+    logo: rahnumaaLogo,
+  },
+  {
+    name: "Pax Youth Initiative",
+    type: "Strategic Community Partner",
+    description:
+      "Aligned with UN SDGs 4 and 16: peace education, digital literacy, and meaningful youth dialogue, including collaboration around their Peace Talks series.",
+    logo: paxYouthLogo,
+  },
+  {
+    name: "Youth General Parliament",
+    type: "Youth Leadership Partner",
+    description:
+      "A simulated parliamentary experience that empowers young people through policy-making, legislative debate, and engagement with real-world experts.",
+    logo: ygpLogo,
+  },
+  {
+    name: "Super Student PK",
+    type: "Educational & Career Partner",
+    description:
+      "Led by education and career coach Sama Zaidi: one-on-one career counseling, designing star careers, and youth voice through the Super Space Podcast.",
+    logo: superStudentPkLogo,
+  },
 ];
 
 const Partnerships = () => {
@@ -57,6 +88,16 @@ const Partnerships = () => {
           <div className="w-24 h-1 bg-gradient-accent mx-auto mb-8" />
           <p className="text-lg sm:text-xl text-muted-foreground">
             Collaborating with organizations that share our mission
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            <a
+              href="/docs/Zaviah-Organization-Profile-2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              Download Organization Profile (PDF)
+            </a>
           </p>
         </motion.div>
 

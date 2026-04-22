@@ -13,7 +13,7 @@ const pillars = [
   {
     icon: Eye,
     title: "Awareness",
-    description: "Through mentorship, workshops, and open discussions, we help students become more confident, informed, and self-aware — ready to make better choices for their future and create positive change.",
+    description: "Through mentorship, workshops, and open discussions, we help students become more confident, informed, and self-aware, ready to make better choices for their future and create positive change.",
     gradient: "from-accent to-secondary",
   },
   {

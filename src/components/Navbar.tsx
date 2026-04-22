@@ -19,6 +19,7 @@ const navItems = [
   { name: "Offerings", href: "#offerings" },
   { name: "Partnerships", href: "#partnerships" },
   { name: "Contact", href: "#contact" },
+  { name: "Gallery", href: "#gallery" },
   {
     name: "Team",
     subItems: [
@@ -88,8 +89,12 @@ const Navbar = () => {
     const isHomePage = location.pathname === "/";
 
     if (!isHomePage) {
-      // If not on home page, navigate to home with hash
-      navigate(`/${href}`);
+      if (href.startsWith("#")) {
+        navigate({ pathname: "/", hash: href.slice(1) });
+      } else {
+        navigate(href);
+      }
+      setIsMobileMenuOpen(false);
       return;
     }
 
@@ -178,10 +183,10 @@ const Navbar = () => {
                   return (
                     <a
                       key={item.name}
-                      href={item.href}
+                      href={"href" in item ? item.href : "#"}
                       onClick={(e) => {
                         e.preventDefault();
-                        scrollToSection(item.href);
+                        if ("href" in item) scrollToSection(item.href);
                       }}
                       className="px-5 py-2.5 rounded-lg text-base font-semibold text-foreground hover:bg-muted transition-all duration-300 tracking-wide"
                       style={{ fontFamily: "'Inter', sans-serif" }}
@@ -278,10 +283,10 @@ const Navbar = () => {
                   return (
                     <a
                       key={item.name}
-                      href={item.href}
+                      href={"href" in item ? item.href : "#"}
                       onClick={(e) => {
                         e.preventDefault();
-                        scrollToSection(item.href);
+                        if ("href" in item) scrollToSection(item.href);
                       }}
                       className="px-4 py-3.5 rounded-lg text-foreground hover:bg-muted transition-colors font-semibold text-lg"
                       style={{ fontFamily: "'Inter', sans-serif" }}

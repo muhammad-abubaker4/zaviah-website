@@ -6,7 +6,9 @@ const CoreMembers = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <Team />
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        <Team />
+      </main>
       <Footer />
     </div>
   );
