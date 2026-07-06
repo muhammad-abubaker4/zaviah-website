@@ -56,7 +56,7 @@ const Footer = () => {
               </span>
             </Link>
 
-            <p className="mb-2 text-sm font-bold text-primary whitespace-nowrap sm:text-[15px]">
+            <p className="mb-2 text-sm font-bold text-primary sm:text-[15px]">
               Access | Awareness | Aspiration
             </p>
 

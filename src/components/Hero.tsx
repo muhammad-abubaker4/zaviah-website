@@ -72,9 +72,9 @@ const Hero = () => {
             transition={{ duration: 0.8 }}
             className="w-full flex justify-center"
           >
-            <h1 className="flex flex-col items-center text-xl min-[400px]:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-              <span className="whitespace-nowrap">Empowering Youth Through</span>
-              <span className="whitespace-nowrap">
+            <h1 className="mb-6 flex flex-col items-center text-xl font-bold leading-tight text-primary-foreground min-[400px]:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+              <span className="text-balance">Empowering Youth Through</span>
+              <span className="text-balance">
                 <span className="text-secondary">Mentorship</span>
                 <span className="text-white">, </span>
                 <span className="text-secondary">Guidance</span>
@@ -123,7 +123,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-10 text-primary-foreground/90"
+            className="mt-12 sm:mt-16 grid grid-cols-2 justify-items-center gap-x-4 gap-y-6 sm:flex sm:flex-wrap sm:justify-center sm:gap-10 text-primary-foreground/90 max-w-lg sm:max-w-none mx-auto"
           >
             <div className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">July 2025</div>
