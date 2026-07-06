@@ -1,20 +1,37 @@
+import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Vision from "@/components/Vision";
-import Pillars from "@/components/Pillars";
-import Values from "@/components/Values";
-import Offerings from "@/components/Offerings";
-import Team from "@/components/Team";
-import GallerySection from "@/components/GallerySection";
-import Partnerships from "@/components/Partnerships";
-import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ColorSchemeToggle from "@/components/ColorSchemeToggle";
+import SectionFallback from "@/components/SectionFallback";
+import PageMeta from "@/components/PageMeta";
+import { buildFaqSchema, faqs } from "@/data/faqs";
+
+const HOME_FAQ_SCHEMA = buildFaqSchema(faqs);
+
+const About = lazy(() => import("@/components/About"));
+const FounderWelcome = lazy(() => import("@/components/FounderWelcome"));
+const Vision = lazy(() => import("@/components/Vision"));
+const Pillars = lazy(() => import("@/components/Pillars"));
+const Values = lazy(() => import("@/components/Values"));
+const Offerings = lazy(() => import("@/components/Offerings"));
+const JoinUs = lazy(() => import("@/components/JoinUs"));
+const Team = lazy(() => import("@/components/Team"));
+const Testimonials = lazy(() => import("@/components/Testimonials"));
+const GallerySection = lazy(() => import("@/components/GallerySection"));
+const Partnerships = lazy(() => import("@/components/Partnerships"));
+const FutureGoals = lazy(() => import("@/components/FutureGoals"));
+const FAQ = lazy(() => import("@/components/FAQ"));
+const Contact = lazy(() => import("@/components/Contact"));
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <PageMeta
+        title="Zaviah - Youth Empowerment Through Mentorship"
+        path="/"
+        jsonLd={HOME_FAQ_SCHEMA}
+      />
       <section id="navbar-section">
         <Navbar />
       </section>
@@ -22,33 +39,76 @@ const Index = () => {
         <section id="hero-section">
           <Hero />
         </section>
-        <section id="about-section">
-          <About />
-        </section>
-        <section id="vision-section">
-          <Vision />
-        </section>
-        <section id="pillars-section">
-          <Pillars />
-        </section>
-        <section id="values-section">
-          <Values />
-        </section>
-        <section id="offerings-section">
-          <Offerings />
-        </section>
-        <section id="team-section">
-          <Team />
-        </section>
-        <section id="gallery-section">
-          <GallerySection />
-        </section>
-        <section id="partnerships-section">
-          <Partnerships />
-        </section>
-        <section id="contact-section">
-          <Contact />
-        </section>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="about-section">
+            <About />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="founder-message-section">
+            <FounderWelcome />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="vision-section">
+            <Vision />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="pillars-section">
+            <Pillars />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="values-section">
+            <Values />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="offerings-section">
+            <Offerings />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="join-section">
+            <JoinUs />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="team-section">
+            <Team />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="testimonials-section">
+            <Testimonials />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="gallery-section">
+            <GallerySection />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="contact-section">
+            <Contact />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="partnerships-section">
+            <Partnerships />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="future-goals-section">
+            <FutureGoals />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="faq-section">
+            <FAQ />
+          </section>
+        </Suspense>
       </main>
       <section id="footer-section">
         <Footer />

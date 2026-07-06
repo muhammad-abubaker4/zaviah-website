@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Handshake } from "lucide-react";
+import { ORG_PROFILE_PDF, PARTNER_COUNT } from "@/lib/constants";
 
 // Import partner logos
 import balochistanPhysioLogo from "@/assets/partners/BPC_Logo.png";
@@ -29,7 +30,6 @@ const partners = [
   {
     name: "International Connection for Cultural Diplomacy",
     type: "Strategic Community Partner",
-    // description: "Global youth community working on cultural diplomacy, international relations, UN simulations, and cross border collaboration.",
     description: "Youth led platform promoting cultural diplomacy, international relations, and global connectivity.",
     logo: iccd,
   },
@@ -86,12 +86,15 @@ const Partnerships = () => {
             Partnerships & <span className="text-primary">MoUs</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-accent mx-auto mb-8" />
+          <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+            {PARTNER_COUNT}+ partner organizations
+          </span>
           <p className="text-lg sm:text-xl text-muted-foreground">
             Collaborating with organizations that share our mission
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
             <a
-              href="/docs/Zaviah-Organization-Profile-2026.pdf"
+              href={ORG_PROFILE_PDF}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-primary underline-offset-4 hover:underline"
@@ -111,7 +114,6 @@ const Partnerships = () => {
               className="group"
             >
               <div className="bg-card rounded-2xl p-8 shadow-soft hover:shadow-medium transition-all duration-300 border border-border h-full flex flex-col items-center text-center hover:-translate-y-1">
-                {/* Partner Logo */}
                 {partner.logo ? (
                   <div className="w-24 h-24 rounded-xl bg-white/50 border-2 border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 p-2">
                     <img

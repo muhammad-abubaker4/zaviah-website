@@ -1,17 +1,16 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { User } from "lucide-react";
+import { User, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
-// Import team member images
 import hafsaKhalil from "@/assets/team/Hafsa_Khalil.jpeg";
 import muhammadAbubaker from "@/assets/team/Muhammad_Abubaker.jpeg";
 import qamarAbbas from "@/assets/team/Qamar_Abbas.jpeg";
 import amnaIrfan from "@/assets/team/Amna_Irfan.jpeg";
 import shaheer from "@/assets/team/Shaheer.jpeg";
 import aliGoharQureshi from "@/assets/team/Ali Gohar.jpg";
-// import arsalan from "@/assets/team/Arsalan_Arif.jpeg";
 
 const teamMembers = [
   {
@@ -19,12 +18,14 @@ const teamMembers = [
     role: "Founder",
     description: "Visionary leader committed to empowering youth through mentorship and learning.",
     image: hafsaKhalil,
+    profileHref: "/founder",
   },
   {
     name: "Muhammad Abubaker",
     role: "Co-Founder",
     description: "Leads operations, strategy, and digital direction for meaningful student communities.",
     image: muhammadAbubaker,
+    profileHref: "/co-founder",
   },
   {
     name: "Amna Irfan",
@@ -42,32 +43,14 @@ const teamMembers = [
     name: "Ali Gohar Qureshi",
     role: "Outreach & Engagement",
     description: "Strengthens partnerships and expands student reach through strategic outreach.",
-    image: aliGoharQureshi, 
+    image: aliGoharQureshi,
   },
-  // {
-  //   name: "Arsalan Arif",
-  //   role: "Admin & Coordination",
-  //   description: "Ensures smooth operations through efficient organizational logistics management.",
-  //   image: arsalan,
-  // },
-  // {
-  //   name: "Warda Hanif",
-  //   role: "Strategy & Planning",
-  //   description: "Supports long-term planning and strategic initiatives aligned with our vision.",
-  //   image: undefined, // Replace with: wardaHanif
-  // },
   {
     name: "Shaheer Ali",
     role: "Campus Coordination",
     description: "Builds campus presence, organizing events and connecting youth leaders.",
     image: shaheer,
   },
-  // {
-  //   name: "Tashfeen",
-  //   role: "Outreach & Engagement",
-  //   description: "Strengthens partnerships and expands student reach through strategic outreach.",
-  //   image: undefined,
-  // },
 ];
 
 const Team = () => {
@@ -92,7 +75,7 @@ const Team = () => {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {teamMembers.map((member, index) => (
             <motion.div
               key={member.name}
@@ -102,29 +85,31 @@ const Team = () => {
               className="group"
             >
               <div className="bg-card rounded-2xl p-6 shadow-soft hover:shadow-medium transition-all duration-300 border border-border h-full flex flex-col items-center text-center hover:-translate-y-2">
-                {/* Team Member Photo */}
                 <Avatar className="w-32 h-32 mb-4 group-hover:scale-105 transition-transform duration-300">
                   <AvatarImage
                     src={member.image}
                     alt={member.name}
                     className="object-cover"
+                    loading="lazy"
                   />
                   <AvatarFallback className="bg-gradient-hero">
                     <User className="w-16 h-16 text-white" />
                   </AvatarFallback>
                 </Avatar>
 
-                <h3 className="text-xl font-bold text-foreground mb-1">
-                  {member.name}
-                </h3>
+                <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
+                <div className="text-sm font-semibold text-primary mb-3">{member.role}</div>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">{member.description}</p>
 
-                <div className="text-sm font-semibold text-primary mb-3">
-                  {member.role}
-                </div>
-
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {member.description}
-                </p>
+                {member.profileHref && (
+                  <Link
+                    to={member.profileHref}
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4"
+                  >
+                    View profile
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
               </div>
             </motion.div>
           ))}

@@ -1,9 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageMeta from "@/components/PageMeta";
 
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Privacy Policy"
+        description="How Zaviah collects, uses, and protects your information when you use our website and programs."
+        path="/privacy"
+      />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
         <div className="container max-w-3xl px-4 py-16 md:py-24">

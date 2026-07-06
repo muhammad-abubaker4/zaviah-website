@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageMeta from "@/components/PageMeta";
 import { motion } from "framer-motion";
 import { galleryHeroImage } from "@/data/galleryImages";
 import GalleryGrid from "@/components/GalleryGrid";
@@ -7,6 +8,11 @@ import GalleryGrid from "@/components/GalleryGrid";
 const Gallery = () => {
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Gallery"
+        description="Photos from Zaviah events, mentorship sessions, and youth programs across Pakistan."
+        path="/gallery"
+      />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
       <section className="relative flex min-h-[85vh] w-full items-center justify-center overflow-hidden">
@@ -14,6 +20,10 @@ const Gallery = () => {
           <img
             src={galleryHeroImage.src}
             alt={galleryHeroImage.alt}
+            width={1920}
+            height={1080}
+            decoding="async"
+            fetchPriority="high"
             className="h-full w-full object-cover object-center"
             sizes="100vw"
           />

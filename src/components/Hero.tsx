@@ -1,13 +1,31 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FileDown } from "lucide-react";
 import { heroBackgroundSlides } from "@/data/galleryImages";
+import { JOIN_FORM_URL, ORG_PROFILE_PDF, PARTNER_COUNT } from "@/lib/constants";
+import { scrollToHashWhenReady } from "@/lib/scroll";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 const SLIDE_INTERVAL_MS = 5500;
 
+const scrollToAbout = () => scrollToHashWhenReady("#about");
+
 const Hero = () => {
   const [slideIndex, setSlideIndex] = useState(0);
+  const activeSlide = heroBackgroundSlides[slideIndex] ?? heroBackgroundSlides[0];
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const first = heroBackgroundSlides[0];
+    if (!first) return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = first.src;
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, []);
 
   useEffect(() => {
     if (heroBackgroundSlides.length <= 1) return;
@@ -17,22 +35,32 @@ const Hero = () => {
     return () => window.clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    heroBackgroundSlides.forEach((slide, i) => {
+      if (i === slideIndex) return;
+      const img = new Image();
+      img.src = slide.src;
+    });
+  }, [slideIndex]);
+
   return (
-    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
+    <section id="hero" className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        {heroBackgroundSlides.map((slide, i) => (
+        {activeSlide && (
           <motion.img
-            key={slide.src}
-            src={slide.src}
-            alt={i === slideIndex ? slide.alt : ""}
-            aria-hidden={i !== slideIndex}
+            key={activeSlide.src}
+            src={activeSlide.src}
+            alt={activeSlide.alt}
+            width={1920}
+            height={1080}
             decoding="async"
-            fetchPriority={i === 0 ? "high" : "low"}
-            animate={{ opacity: i === slideIndex ? 1 : 0 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            fetchPriority="high"
+            initial={prefersReducedMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 1.2, ease: "easeInOut" }}
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-        ))}
+        )}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/55 via-primary/45 to-accent/30 z-[1]" />
       </div>
 
@@ -60,7 +88,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-full max-w-[100vw] text-primary-foreground/90 mb-8 px-1 text-xs min-[380px]:text-sm sm:text-base md:text-lg whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="w-full max-w-2xl text-primary-foreground/90 mb-8 px-1 text-sm sm:text-base md:text-lg leading-relaxed"
           >
             A youth-led platform connecting students with mentors, opportunities, and the guidance they need to thrive
           </motion.p>
@@ -73,14 +101,18 @@ const Hero = () => {
           >
             <Button
               size="lg"
+              asChild
               className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full shadow-medium transition-all duration-300 hover:scale-105"
             >
-              Join Our Community
-              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <a href={JOIN_FORM_URL} target="_blank" rel="noopener noreferrer">
+                Join Our Community
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+              </a>
             </Button>
             <Button
               size="lg"
               variant="outline"
+              onClick={scrollToAbout}
               className="bg-transparent border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full transition-all duration-300"
             >
               Learn More
@@ -91,21 +123,44 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 text-primary-foreground/90"
+            className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-10 text-primary-foreground/90"
           >
             <div className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">July 2025</div>
               <div className="text-xs sm:text-sm mt-1">Founded</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">1000+</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">
+                <AnimatedCounter end={1000} suffix="+" />
+              </div>
               <div className="text-xs sm:text-sm mt-1">Students Empowered</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">20+</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">
+                <AnimatedCounter end={20} suffix="+" />
+              </div>
               <div className="text-xs sm:text-sm mt-1">Mentors</div>
             </div>
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">
+                <AnimatedCounter end={PARTNER_COUNT} suffix="+" />
+              </div>
+              <div className="text-xs sm:text-sm mt-1">Partner Organizations</div>
+            </div>
           </motion.div>
+
+          <motion.a
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            href={ORG_PROFILE_PDF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+          >
+            <FileDown className="h-4 w-4" />
+            Organization Profile 2026
+          </motion.a>
         </div>
       </div>
 
@@ -132,11 +187,15 @@ const Hero = () => {
         className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10"
       >
         <div className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-primary-foreground/50 rounded-full flex justify-center">
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-primary-foreground/50 rounded-full mt-1.5 sm:mt-2"
-          />
+          {prefersReducedMotion ? (
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-primary-foreground/50 rounded-full mt-1.5 sm:mt-2" />
+          ) : (
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-primary-foreground/50 rounded-full mt-1.5 sm:mt-2"
+            />
+          )}
         </div>
       </motion.div>
     </section>

@@ -1,11 +1,17 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageMeta from "@/components/PageMeta";
 import { motion } from "framer-motion";
 import muhammadAbubaker from "@/assets/team/Muhammad_Abubaker.jpeg";
 
 const CoFounder = () => {
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Muhammad Abubaker — Co-Founder"
+        description="Meet Muhammad Abubaker, Co-Founder of Zaviah — leading operations, strategy, and digital direction for student communities nationwide."
+        path="/co-founder"
+      />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
       {/* Banner Section */}

@@ -1,9 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageMeta from "@/components/PageMeta";
 
 const Terms = () => {
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Terms of Use"
+        description="Terms and conditions for using the Zaviah website and participating in our programs."
+        path="/terms"
+      />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
         <div className="container max-w-3xl px-4 py-16 md:py-24">

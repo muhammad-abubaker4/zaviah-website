@@ -3,7 +3,16 @@ import galleryHeroTop from "@/gallery/1.jpeg";
 export type GalleryImage = {
   src: string;
   alt: string;
+  caption?: string;
 };
+
+function captionFromPath(path: string): string | undefined {
+  const match = path.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return undefined;
+  const [, year, month] = match;
+  const monthName = new Date(Number(year), Number(month) - 1).toLocaleString("en", { month: "short" });
+  return `Community moment — ${monthName} ${year}`;
+}
 
 /** Full-width image at the top of the Gallery page (`src/gallery/1.jpeg`). */
 export const galleryHeroImage: GalleryImage = {
@@ -36,4 +45,5 @@ export const galleryGridImages: GalleryImage[] = Object.entries(galleryFolderMod
   .map(([path, src]) => ({
     src,
     alt: "Zaviah gallery moment",
+    caption: captionFromPath(path),
   }));

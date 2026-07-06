@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,107 +9,248 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AMBASSADOR_FORM_URL,
+  CORE_TEAM_FORM_URL,
+  JOIN_FORM_URL,
+} from "@/lib/constants";
+import { scrollToHashWhenReady, unlockPageScroll } from "@/lib/scroll";
+import { useActiveSection, isAboutSectionActive, isTeamRouteActive } from "@/hooks/useActiveSection";
+import { cn } from "@/lib/utils";
 import zaviahLogo from "@/assets/Zaviah_Logo1.png";
 
-const navItems = [
-  { name: "About", href: "#about" },
-  { name: "Vision", href: "#vision" },
-  { name: "Pillars", href: "#pillars" },
-  { name: "Values", href: "#values" },
-  { name: "Offerings", href: "#offerings" },
-  { name: "Partnerships", href: "#partnerships" },
-  { name: "Contact", href: "#contact" },
+type NavLink = { name: string; href: string };
+type NavDropdown = {
+  name: string;
+  subItems: Array<{ name: string; href: string; internal?: boolean }>;
+};
+
+const aboutSubItems: NavDropdown["subItems"] = [
+  { name: "Our Story", href: "#about" },
+  { name: "Founder's Message", href: "#founder-message" },
+  { name: "Vision & Mission", href: "#vision" },
+  { name: "Core Pillars", href: "#pillars" },
+  { name: "Our Values", href: "#values" },
+  { name: "Future Goals", href: "#future-goals" },
+];
+
+const teamSubItems: NavDropdown["subItems"] = [
+  { name: "Founder", href: "/founder", internal: true },
+  { name: "Co-Founder", href: "/co-founder", internal: true },
+  { name: "Core Members", href: "/core-members", internal: true },
+];
+
+const joinSubItems: NavDropdown["subItems"] = [
+  { name: "Member", href: JOIN_FORM_URL },
+  { name: "Ambassador", href: AMBASSADOR_FORM_URL },
+  { name: "Core Team Member", href: CORE_TEAM_FORM_URL },
+];
+
+const navLinks: NavLink[] = [
+  { name: "Programs", href: "#offerings" },
   { name: "Gallery", href: "#gallery" },
-  {
-    name: "Team",
-    subItems: [
-      { name: "Founder", href: "/founder", internal: true },
-      { name: "Co-Founder", href: "/co-founder", internal: true },
-      { name: "Core Members", href: "/core-members", internal: true },
-    ],
-  },
-  {
-    name: "Join Us",
-    subItems: [
-      { name: "Member/Volunteer/Mentor", href: "https://forms.gle/MAQGim1z9gSptnAn7", internal: false },
-      { name: "Ambassador", href: "https://forms.gle/jEVucnCMiAhKfKuXA", internal: false },
-      { name: "Core Team Member", href: "https://forms.gle/x3Pu6GokwGLszBfBA", internal: false },
-    ],
-  },
+  { name: "Partners", href: "#partnerships" },
+  { name: "Contact", href: "#contact" },
+];
+
+const navDropdowns: NavDropdown[] = [
+  { name: "About", subItems: aboutSubItems },
+  { name: "Team", subItems: teamSubItems },
 ];
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isTeamOpen, setIsTeamOpen] = useState(false);
-  const [isJoinUsOpen, setIsJoinUsOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const activeSection = useActiveSection();
+
+  const isLinkActive = (href: string) =>
+    location.pathname === "/" && activeSection === href.replace("#", "");
+
+  const navButtonClass = (href: string, mobile = false) =>
+    cn(
+      mobile
+        ? "w-full rounded-lg px-4 py-3.5 text-left text-lg font-semibold transition-colors"
+        : "rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 xl:text-base",
+      isLinkActive(href) ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted",
+    );
+
+  const aboutNavClass = (mobile = false) =>
+    cn(
+      mobile
+        ? "flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-lg font-semibold transition-colors"
+        : "flex items-center gap-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 xl:text-base",
+      location.pathname === "/" && isAboutSectionActive(activeSection)
+        ? "text-primary bg-primary/10"
+        : "text-foreground hover:bg-muted",
+    );
+
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+    setOpenMobileDropdown(null);
+    unlockPageScroll();
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.classList.add('overflow-hidden');
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.classList.remove('overflow-hidden');
+      unlockPageScroll();
     }
-
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
   }, [isMobileMenuOpen]);
 
-  // Handle scrolling after navigation
   useEffect(() => {
-    if (location.hash) {
-      const element = document.querySelector(location.hash);
-      if (element) {
-        setTimeout(() => {
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }, 100);
-      }
-    }
-  }, [location]);
+    if (!isMobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMobileMenu();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen, closeMobileMenu]);
 
   const scrollToSection = (href: string) => {
-    // Check if we're on the home page
-    const isHomePage = location.pathname === "/";
+    closeMobileMenu();
 
-    if (!isHomePage) {
-      if (href.startsWith("#")) {
+    if (href.startsWith("#")) {
+      if (location.pathname !== "/") {
         navigate({ pathname: "/", hash: href.slice(1) });
-      } else {
-        navigate(href);
+        return;
       }
-      setIsMobileMenuOpen(false);
+      scrollToHashWhenReady(href);
       return;
     }
 
-    // If on home page, scroll to section
-    const element = document.querySelector(href);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset;
+    navigate(href);
+  };
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+  const dropdownTriggerClass = (item: NavDropdown, mobile = false) => {
+    if (item.name === "About") return aboutNavClass(mobile);
+    if (item.name === "Team") {
+      return cn(
+        mobile
+          ? "flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-lg font-semibold transition-colors"
+          : "flex items-center gap-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 xl:text-base",
+        isTeamRouteActive(location.pathname) ||
+          (location.pathname === "/" && activeSection === "team")
+          ? "text-primary bg-primary/10"
+          : "text-foreground hover:bg-muted",
+      );
     }
-    setIsMobileMenuOpen(false);
+    return cn(
+          mobile
+            ? "flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-lg font-semibold transition-colors"
+            : "flex items-center gap-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 xl:text-base",
+          "text-foreground hover:bg-muted",
+        );
+  };
+
+  const renderDropdown = (item: NavDropdown, mobile = false) => {
+    if (mobile) {
+      const isOpen = openMobileDropdown === item.name;
+      return (
+        <div key={item.name} className="px-4 py-2">
+          <button
+            type="button"
+            onClick={() => setOpenMobileDropdown(isOpen ? null : item.name)}
+            className={dropdownTriggerClass(item, true)}
+          >
+            {item.name}
+            <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          </button>
+          {isOpen && (
+            <div className="ml-4 mt-1 flex flex-col gap-1">
+              {item.subItems.map((subItem) =>
+                subItem.internal ? (
+                  <Link
+                    key={subItem.name}
+                    to={subItem.href}
+                    onClick={closeMobileMenu}
+                    className="rounded-lg px-4 py-2 text-foreground hover:bg-muted transition-colors"
+                  >
+                    {subItem.name}
+                  </Link>
+                ) : subItem.href.startsWith("#") ? (
+                  <button
+                    key={subItem.name}
+                    type="button"
+                    onClick={() => scrollToSection(subItem.href)}
+                    className="w-full rounded-lg px-4 py-2 text-left text-foreground hover:bg-muted transition-colors"
+                  >
+                    {subItem.name}
+                  </button>
+                ) : (
+                  <a
+                    key={subItem.name}
+                    href={subItem.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeMobileMenu}
+                    className="rounded-lg px-4 py-2 text-foreground hover:bg-muted transition-colors"
+                  >
+                    {subItem.name}
+                  </a>
+                ),
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <DropdownMenu key={item.name} modal={false}>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className={dropdownTriggerClass(item)}
+          >
+            {item.name}
+            <ChevronDown className="h-4 w-4" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          {item.subItems.map((subItem) =>
+            subItem.internal ? (
+              <DropdownMenuItem key={subItem.name} asChild>
+                <Link to={subItem.href} className="cursor-pointer">
+                  {subItem.name}
+                </Link>
+              </DropdownMenuItem>
+            ) : subItem.href.startsWith("#") ? (
+              <DropdownMenuItem
+                key={subItem.name}
+                className="cursor-pointer"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  scrollToSection(subItem.href);
+                }}
+              >
+                {subItem.name}
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem key={subItem.name} asChild>
+                <a
+                  href={subItem.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer"
+                >
+                  {subItem.name}
+                </a>
+              </DropdownMenuItem>
+            ),
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
   };
 
   return (
@@ -119,183 +260,137 @@ const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
         id="navbar"
-        className="relative bg-white shadow-md transition-all duration-300"
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          isScrolled ? "bg-white/95 shadow-md backdrop-blur-md" : "bg-white shadow-sm"
+        }`}
       >
         <div className="container px-4">
-          <div className="flex items-center justify-between h-24">
-            {/* Logo */}
+          <div
+            className={`flex items-center justify-between transition-all duration-300 ${
+              isScrolled ? "h-16" : "h-20"
+            }`}
+          >
             <a
-              href="#"
+              href="/"
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                if (location.pathname === "/") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  window.history.replaceState(null, "", "/");
+                } else {
+                  navigate("/");
+                }
+                closeMobileMenu();
               }}
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer sm:gap-3"
             >
               <img
                 src={zaviahLogo}
                 alt="Zaviah Logo"
-                className="h-20 md:h-30 w-auto object-contain"
+                className={`w-auto object-contain transition-all duration-300 ${
+                  isScrolled ? "h-12" : "h-16"
+                }`}
               />
-              <span
-                className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent tracking-tight"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
+              <span className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent tracking-tight sm:text-3xl">
                 Zaviah
               </span>
             </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-2">
-              {navItems.map((item) => {
-                if (item.subItems) {
-                  return (
-                    <DropdownMenu key={item.name}>
-                      <DropdownMenuTrigger asChild>
-                        <button className="px-5 py-2.5 rounded-lg text-base font-semibold text-foreground hover:bg-muted transition-all duration-300 tracking-wide flex items-center gap-1">
-                          {item.name}
-                          <ChevronDown className="h-4 w-4" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className={item.name === "Join Us" ? "w-64" : "w-56"}>
-                        {item.subItems.map((subItem) => (
-                          <DropdownMenuItem key={subItem.name} asChild>
-                            {subItem.internal ? (
-                              <Link to={subItem.href} className="cursor-pointer">
-                                {subItem.name}
-                              </Link>
-                            ) : (
-                              <a
-                                href={subItem.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="cursor-pointer"
-                              >
-                                {subItem.name}
-                              </a>
-                            )}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  );
-                } else {
-                  return (
-                    <a
-                      key={item.name}
-                      href={"href" in item ? item.href : "#"}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if ("href" in item) scrollToSection(item.href);
-                      }}
-                      className="px-5 py-2.5 rounded-lg text-base font-semibold text-foreground hover:bg-muted transition-all duration-300 tracking-wide"
-                      style={{ fontFamily: "'Inter', sans-serif" }}
-                    >
-                      {item.name}
-                    </a>
-                  );
-                }
-              })}
+            <div className="hidden lg:flex items-center gap-1">
+              {navDropdowns.map((item) => renderDropdown(item))}
+              {navLinks.map((item) => (
+                <button
+                  key={item.name}
+                  type="button"
+                  onClick={() => scrollToSection(item.href)}
+                  className={navButtonClass(item.href)}
+                >
+                  {item.name}
+                </button>
+              ))}
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="sm"
+                    className="ml-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold"
+                  >
+                    Join Us
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  {joinSubItems.map((subItem) => (
+                    <DropdownMenuItem key={subItem.name} asChild>
+                      <a
+                        href={subItem.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cursor-pointer"
+                      >
+                        {subItem.name}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
-
-
-            {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg text-foreground hover:bg-muted transition-colors"
               aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Backdrop */}
       {isMobileMenuOpen && (
         <div
-          className="fixed top-0 left-0 right-0 bottom-0 z-30 bg-black bg-opacity-50"
-          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          onClick={closeMobileMenu}
+          aria-hidden
         />
       )}
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-0 left-0 right-0 z-40 bg-white backdrop-blur-md shadow-lg lg:hidden max-h-[calc(100vh)] overflow-y-auto"
+          className="fixed top-0 left-0 right-0 z-40 max-h-screen overflow-y-auto bg-white shadow-lg lg:hidden"
         >
-          <div className="container px-4 py-6">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => {
-                if (item.subItems) {
-                  return (
-                    <div key={item.name} className="px-4 py-3.5">
-                      <button
-                        onClick={() => {
-                          if (item.name === "Team") setIsTeamOpen(!isTeamOpen);
-                          if (item.name === "Join Us") setIsJoinUsOpen(!isJoinUsOpen);
-                        }}
-                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-lg text-foreground hover:bg-muted transition-colors font-semibold text-lg"
-                        style={{ fontFamily: "'Inter', sans-serif" }}
-                      >
-                        {item.name}
-                        <ChevronDown className={`h-4 w-4 transition-transform ${(item.name === "Team" && isTeamOpen) || (item.name === "Join Us" && isJoinUsOpen) ? 'rotate-180' : ''
-                          }`} />
-                      </button>
-                      {((item.name === "Team" && isTeamOpen) || (item.name === "Join Us" && isJoinUsOpen)) && (
-                        <div className="flex flex-col gap-1 ml-4 mt-2">
-                          {item.subItems.map((subItem) => (
-                            subItem.internal ? (
-                              <Link
-                                key={subItem.name}
-                                to={subItem.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors"
-                              >
-                                {subItem.name}
-                              </Link>
-                            ) : (
-                              <a
-                                key={subItem.name}
-                                href={subItem.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-4 py-2 rounded-lg text-foreground hover:bg-muted transition-colors"
-                              >
-                                {subItem.name}
-                              </a>
-                            )
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                } else {
-                  return (
-                    <a
-                      key={item.name}
-                      href={"href" in item ? item.href : "#"}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if ("href" in item) scrollToSection(item.href);
-                      }}
-                      className="px-4 py-3.5 rounded-lg text-foreground hover:bg-muted transition-colors font-semibold text-lg"
-                      style={{ fontFamily: "'Inter', sans-serif" }}
-                    >
-                      {item.name}
-                    </a>
-                  );
-                }
-              })}
+          <div className="container px-4 py-6 pt-20">
+            <div className="flex flex-col gap-1">
+              {navDropdowns.map((item) => renderDropdown(item, true))}
+              {navLinks.map((item) => (
+                <button
+                  key={item.name}
+                  type="button"
+                  onClick={() => scrollToSection(item.href)}
+                  className={navButtonClass(item.href, true)}
+                >
+                  {item.name}
+                </button>
+              ))}
+              <div className="px-4 py-3">
+                <p className="mb-2 px-4 text-sm font-semibold text-muted-foreground">Join Us</p>
+                {joinSubItems.map((subItem) => (
+                  <a
+                    key={subItem.name}
+                    href={subItem.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeMobileMenu}
+                    className="block rounded-lg px-4 py-2.5 text-foreground hover:bg-muted transition-colors"
+                  >
+                    {subItem.name}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>

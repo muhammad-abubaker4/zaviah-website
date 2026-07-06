@@ -1,11 +1,17 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageMeta from "@/components/PageMeta";
 import { motion } from "framer-motion";
 import hafsaKhalil from "@/assets/team/Hafsa_Khalil.jpeg";
 
 const Founder = () => {
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Hafsa Khalil — Founder"
+        description="Meet Hafsa Khalil, Founder & CEO of Zaviah — empowering youth across Pakistan through mentorship, leadership, and learning."
+        path="/founder"
+      />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none">
       {/* Banner Section */}

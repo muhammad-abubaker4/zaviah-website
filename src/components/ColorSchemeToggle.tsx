@@ -42,7 +42,7 @@ const ColorSchemeToggle = () => {
       onClick={toggleScheme}
       variant="outline"
       size="icon"
-      className="fixed bottom-4 right-4 z-50 rounded-full shadow-lg bg-white hover:bg-muted"
+      className="fixed bottom-4 left-4 z-50 rounded-full shadow-lg bg-white hover:bg-muted"
       aria-label="Toggle color scheme"
       title={isAltScheme ? "Switch to organization colors (#253439)" : "Switch to teal accent scheme"}
     >

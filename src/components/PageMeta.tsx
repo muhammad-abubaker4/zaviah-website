@@ -1,0 +1,75 @@
+import { useEffect } from "react";
+import { DEFAULT_DESCRIPTION, OG_IMAGE, pageTitle, pageUrl } from "@/lib/site";
+
+type PageMetaProps = {
+  title: string;
+  description?: string;
+  /** Path only, e.g. `/founder` */
+  path?: string;
+  noIndex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const setMeta = (attr: "name" | "property", key: string, content: string) => {
+  let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.content = content;
+};
+
+const setCanonical = (href: string) => {
+  let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!el) {
+    el = document.createElement("link");
+    el.rel = "canonical";
+    document.head.appendChild(el);
+  }
+  el.href = href;
+};
+
+const PageMeta = ({
+  title,
+  description = DEFAULT_DESCRIPTION,
+  path = "/",
+  noIndex = false,
+  jsonLd,
+}: PageMetaProps) => {
+  useEffect(() => {
+    const fullTitle = pageTitle(title);
+    const url = pageUrl(path);
+
+    document.title = fullTitle;
+    setCanonical(url);
+    setMeta("name", "description", description);
+    setMeta("name", "robots", noIndex ? "noindex, nofollow" : "index, follow");
+    setMeta("property", "og:title", fullTitle);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", url);
+    setMeta("property", "og:image", OG_IMAGE);
+    setMeta("name", "twitter:title", fullTitle);
+    setMeta("name", "twitter:description", description);
+    setMeta("name", "twitter:image", OG_IMAGE);
+
+    const scriptId = "page-jsonld";
+    document.getElementById(scriptId)?.remove();
+
+    if (jsonLd) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "application/ld+json";
+      script.textContent = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      document.getElementById(scriptId)?.remove();
+    };
+  }, [title, description, path, noIndex, jsonLd]);
+
+  return null;
+};
+
+export default PageMeta;

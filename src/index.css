@@ -46,6 +46,9 @@ Organization brand: #253439 → hsl(195 21% 18%)
     --shadow-soft: 0 4px 24px -4px hsl(195 21% 18% / 0.12);
     --shadow-medium: 0 12px 48px -12px hsl(195 21% 18% / 0.2);
 
+    --footer-background: 195 14% 94%;
+    --footer-bar: 195 12% 97%;
+
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
@@ -97,6 +100,10 @@ Organization brand: #253439 → hsl(195 21% 18%)
     --gradient-hero: linear-gradient(135deg, hsl(195 20% 16%) 0%, hsl(195 18% 26%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(25 90% 55%) 0%, hsl(30 90% 50%) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(195 18% 7%) 0%, hsl(195 16% 11%) 100%);
+
+    --footer-background: 195 16% 12%;
+    --footer-bar: 195 16% 10%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -128,6 +135,9 @@ Organization brand: #253439 → hsl(195 21% 18%)
 
     --shadow-soft: 0 4px 20px -4px hsl(185 80% 35% / 0.15);
     --shadow-medium: 0 10px 40px -10px hsl(185 80% 35% / 0.25);
+
+    --footer-background: 185 18% 94%;
+    --footer-bar: 185 16% 97%;
   }
 
   .dark.color-scheme-alt {
@@ -156,9 +166,15 @@ Organization brand: #253439 → hsl(195 21% 18%)
     text-rendering: optimizeLegibility;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
