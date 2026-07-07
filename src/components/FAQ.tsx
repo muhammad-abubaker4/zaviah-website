@@ -19,7 +19,7 @@ const FAQ = () => {
           transition={{ duration: 0.4 }}
           className="mb-8 text-center text-[1.75rem] font-bold tracking-wide text-primary md:mb-10 md:text-[2rem]"
         >
-          FAQS
+          FAQs
         </motion.h2>
 
         <div className="flex flex-col gap-[1.125rem]">

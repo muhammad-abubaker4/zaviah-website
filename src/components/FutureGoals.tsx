@@ -67,7 +67,7 @@ const FutureGoals = () => {
           </h2>
           <div className="w-24 h-1 bg-gradient-accent mx-auto mb-8" />
           <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed">
-            Where we&apos;re headed, driven by consistent effort, collaboration, and the courage to lead change.
+            Where we&apos;re headed, driven by consistent effort, collaboration, and courage to lead change.
           </p>
         </motion.div>
 
