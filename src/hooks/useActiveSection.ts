@@ -10,6 +10,7 @@ const SECTION_IDS = [
   "offerings",
   "join",
   "team",
+  "guest-speakers",
   "testimonials",
   "gallery",
   "contact",

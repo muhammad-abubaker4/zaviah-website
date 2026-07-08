@@ -17,6 +17,7 @@ const Values = lazy(() => import("@/components/Values"));
 const Offerings = lazy(() => import("@/components/Offerings"));
 const JoinUs = lazy(() => import("@/components/JoinUs"));
 const Team = lazy(() => import("@/components/Team"));
+const GuestSpeakers = lazy(() => import("@/components/GuestSpeakers"));
 const Testimonials = lazy(() => import("@/components/Testimonials"));
 const GallerySection = lazy(() => import("@/components/GallerySection"));
 const Partnerships = lazy(() => import("@/components/Partnerships"));
@@ -77,6 +78,11 @@ const Index = () => {
         <Suspense fallback={<SectionFallback />}>
           <section id="team-section">
             <Team />
+          </section>
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <section id="guest-speakers-section">
+            <GuestSpeakers />
           </section>
         </Suspense>
         <Suspense fallback={<SectionFallback />}>

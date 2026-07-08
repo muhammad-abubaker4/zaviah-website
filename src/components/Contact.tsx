@@ -38,6 +38,16 @@ const Contact = () => {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const encodeForm = (form: HTMLFormElement) => {
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      // Netlify forms are text-only here; ignore non-string values safely.
+      params.append(key, typeof value === "string" ? value : "");
+    }
+    return params.toString();
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
@@ -52,7 +62,7 @@ const Contact = () => {
     }
 
     const form = e.currentTarget;
-    const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+    const body = encodeForm(form);
 
     try {
       const response = await fetch("/", {

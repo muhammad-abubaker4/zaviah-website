@@ -2,10 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Quote } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import hibaSyed from "@/assets/team/Hiba_Syed.jpg";
-import amnaSardar from "@/assets/team/MPA_Amna_Sardar.jpeg";
-import rajaZeeshan from "@/assets/team/Raja_Zeeshan.jpeg";
-import drSassiSherMalik from "@/assets/team/Dr_Sassi_Sher_Malik.jpeg";
+import { mentorImages } from "@/data/mentors";
+import rajaZeeshan from "@/assets/testimonials/raja-zeeshan.jpeg";
+import abubakerSadiq from "@/assets/testimonials/abubaker-sadiq.jpeg";
+import hibaSyedTestimonial from "@/assets/testimonials/hiba-syed.jpg";
 
 type Testimonial = {
   quote: string;
@@ -43,6 +43,8 @@ const testimonials: Testimonial[] = [
     name: "Abubaker Sadiq",
     role: "Member, Swat",
     initials: "AS",
+    image: abubakerSadiq,
+    imageClass: facePhotoClass,
   },
   // Row 2: Hiba, Amna, Dr. Sassi
   {
@@ -51,7 +53,7 @@ const testimonials: Testimonial[] = [
     name: "Hiba Syed",
     role: "Mentor, Karachi",
     initials: "HS",
-    image: hibaSyed,
+    image: hibaSyedTestimonial,
     imageClass: `${facePhotoClass} object-[center_18%]`,
   },
   {
@@ -60,7 +62,7 @@ const testimonials: Testimonial[] = [
     name: "Amna Sardar",
     role: "MPA & Guest Speaker",
     initials: "Am",
-    image: amnaSardar,
+    image: mentorImages.amnaSardar,
     imageClass: `${facePhotoClass} object-[center_12%]`,
   },
   {
@@ -69,8 +71,17 @@ const testimonials: Testimonial[] = [
     name: "Dr. Sassi Sher Malik",
     role: "CSS Officer & Guest Speaker",
     initials: "SM",
-    image: drSassiSherMalik,
+    image: mentorImages.drSassiMalikSher,
     imageClass: `${facePhotoClass} object-[center_22%]`,
+  },
+  {
+    quote:
+      "Words have always been my greatest strength, and Zaviah gave me the platform to turn them into a voice that could inspire others. Thank you for believing in me, building my confidence, and giving me opportunities that truly changed my life. I am forever grateful to be part of this journey.",
+    name: "Arbeeha Zahid",
+    role: "Member, Kashmir",
+    initials: "AZ",
+    image: mentorImages.arbeehaZahid,
+    imageClass: `${facePhotoClass} object-[center_18%]`,
   },
 ];
 

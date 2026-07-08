@@ -38,6 +38,7 @@ const teamSubItems: NavDropdown["subItems"] = [
   { name: "Founder", href: "/founder", internal: true },
   { name: "Co-Founder", href: "/co-founder", internal: true },
   { name: "Core Members", href: "/core-members", internal: true },
+  { name: "Guest Speakers", href: "#guest-speakers" },
 ];
 
 const joinSubItems: NavDropdown["subItems"] = [
@@ -139,7 +140,7 @@ const Navbar = () => {
           ? "flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-lg font-semibold transition-colors"
           : "flex items-center gap-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 xl:text-base",
         isTeamRouteActive(location.pathname) ||
-          (location.pathname === "/" && activeSection === "team")
+          (location.pathname === "/" && (activeSection === "team" || activeSection === "guest-speakers"))
           ? "text-primary bg-primary/10"
           : "text-foreground hover:bg-muted",
       );
